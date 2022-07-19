@@ -22,4 +22,14 @@ Route::get('/', function () {
 
 //Route::get('/curl', SiteController::class, @index');
 Route::get('/curl', [SiteController::class, 'index']);
+Route::get('/net-sales', [SiteController::class, 'netSales']);
+Route::get('/production-costs', [SiteController::class, 'productionCosts']);
+Route::get('/gross-profit', [SiteController::class, 'grossProfit']);
+Route::get('/gross-margin', [SiteController::class, 'grossMargin']);
+
+
+
+
+
+
 

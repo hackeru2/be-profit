@@ -8,23 +8,34 @@ use Illuminate\Support\Facades\Http;
 
 class SiteController extends Controller
 {
-    public function index()
+    /**
+     * @return mixed
+     */
+    public function netSales(): mixed
     {
-        $api_url = env('API_URL');
-        $api_username = env('API_USERNAME');
-        $api_password = env('API_PASSWORD');
-        $auth = base64_encode($api_username . ":" . $api_password);
-
-        $response = Http::withHeaders(['Authorization' => "Basic ".$auth ])->get($api_url);
-        $statusCode = $response->status();
-        $responseBody = json_decode($response->getBody(), true);
-
-        echo "Status code: ". $statusCode;  // status code
-
-        //dd($responseBody['data']); // body response
-
-        Order::insert($responseBody['data']);
-        return Order::all();
-
+        return Order::whereFinancialStatus('partially_paid')
+            ->orWhere('financial_status','paid')->sum('total_price');
     }
+
+    public function productionCosts(): mixed
+    {
+        return Order::whereFulfillmentStatus('fulfilled')
+            ->where(function($query){
+                $query->whereFinancialStatus('partially_paid')
+                ->orWhere('financial_status','paid');
+            })->sum('total_production_cost');
+    }
+
+   public function grossProfit(): mixed
+   {
+        return $this->netSales() - $this->productionCosts();
+   }
+   function grossMargin(): STRING
+   {
+        $netSales = $this->netSales();
+        $grossProfit = $this->grossProfit();
+       return number_format( $grossProfit / $netSales * 100  , 2) . '%';
+
+   }
+
 }
