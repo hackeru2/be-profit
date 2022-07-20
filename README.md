@@ -44,7 +44,7 @@ The server should run on http://localhost
 ## Migrations and Seeder
 This action will create the database be-profit with the data from the external api .
 ```sh
-sail php artisan migrate:fresh --seed 
+./vendor/bin/sail php artisan migrate:fresh --seed 
 ```
 
 ## Api
