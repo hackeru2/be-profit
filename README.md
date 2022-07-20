@@ -27,7 +27,12 @@ cp .env.example .env
 Install the dependencies and devDependencies .
 
 ```sh
-composer install
+docker run --rm \       
+    -u "$(id -u):$(id -g)" \
+    -v $(pwd):/var/www/html \
+    -w /var/www/html \
+    laravelsail/php81-composer:latest \
+    php artisan sail:install
 ```
 
 Start the server, db and phpmyadmin.
