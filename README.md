@@ -13,7 +13,6 @@
 
 - docker
 - docker-compose
-- composer ^2
 
 
 
